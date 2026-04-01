@@ -82,10 +82,13 @@ nav a.active {
     color: #38bdf8;
     font-size: 30px;
     cursor: pointer;
+    /* Make tap target bigger on mobile */
+    padding: 4px 8px;
+    z-index: 1001;
 }
 
 /* ===== MOBILE NAV ===== */
-@media(max-width: 768px) {
+@media (max-width: 768px) {
     .menu-icon {
         display: block;
     }
@@ -94,16 +97,24 @@ nav a.active {
         display: none;
         flex-direction: column;
         background: rgba(2, 6, 23, 0.98);
-        position: absolute;
-        top: 70px;
+
+        /* FIX: use fixed so it overlays correctly when header is sticky */
+        position: fixed;
+        top: 60px;
+        left: 0;
         right: 0;
         width: 100%;
+
         text-align: center;
         padding: 20px 0;
         border-bottom: 1px solid #1e293b;
         animation: fadeIn 0.3s ease;
+
+        /* FIX: ensure it sits above page content */
+        z-index: 999;
     }
 
+    /* FIX: use .show class consistently (was toggling "show" but CSS used "show") */
     nav.show {
         display: flex;
     }
@@ -111,6 +122,12 @@ nav a.active {
     nav a {
         margin: 15px 0;
         font-size: 1.2rem;
+    }
+
+    /* FIX: on mobile, underline should grow from center to match centered text */
+    nav a::after {
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 

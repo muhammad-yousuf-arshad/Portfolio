@@ -9,28 +9,34 @@ document.addEventListener("click", (e) => {
     const nav = document.getElementById("menu");
     const menuIcon = document.querySelector(".menu-icon");
 
-    if (!nav.contains(e.target) && !menuIcon.contains(e.target)) {
+    if (nav && menuIcon && !nav.contains(e.target) && !menuIcon.contains(e.target)) {
         nav.classList.remove("show");
     }
 });
 
-// ===== SMOOTH SCROLLING =====
-document.querySelectorAll('nav a').forEach(anchor => {
+// ===== SMOOTH SCROLLING + AUTO-CLOSE MENU =====
+document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
 
-        const targetId = this.getAttribute('href');
-        const targetSection = document.querySelector(targetId);
+        // Always close the menu first
+        document.getElementById("menu").classList.remove("show");
 
+        const targetId = this.getAttribute('href');
+
+        // Handle "#home" → scroll to very top
+        if (targetId === "#home") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            return;
+        }
+
+        const targetSection = document.querySelector(targetId);
         if (targetSection) {
             window.scrollTo({
                 top: targetSection.offsetTop - 70,
                 behavior: "smooth"
             });
         }
-
-        // Close menu after click (mobile)
-        document.getElementById("menu").classList.remove("show");
     });
 });
 
@@ -48,7 +54,6 @@ window.addEventListener('scroll', () => {
 
             const id = sec.getAttribute('id');
             const activeLink = document.querySelector(`nav a[href="#${id}"]`);
-
             if (activeLink) activeLink.classList.add('active');
         }
     });
